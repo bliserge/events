@@ -17,6 +17,10 @@ include("connection.php");
             width: 340px;
         }
 
+        .wallet-amount {
+            text-align: center;
+        }
+
         body {
 
             background-image: url(img/back.png);
@@ -141,13 +145,19 @@ include("connection.php");
             margin-right: auto;
             max-width: 940px;
         }
+        .on {
+			display: block !important;
+		}
+		.off {
+			display: none !important;
+		}
     </style>
 
 <body>
     <?php require_once "navbar.php"; ?>
     <?php
     $userid = $_SESSION['userid'];
-    $result = mysqli_query($conn, "SELECT * FROM users WHERE id = $userid");
+    $result = mysqli_query($conn, "SELECT u.*, w.id as walletId, w.amount FROM users u JOIN wallets w ON u.id = w.userId WHERE u.id = $userid");
     if (mysqli_num_rows($result) > 0) {
         // output data of each row
         while ($row = mysqli_fetch_assoc($result)) {
@@ -155,9 +165,8 @@ include("connection.php");
 
 
 
-            ?>
-            <h1
-                style="text-align: center; font-family: sans-serif; background: linear-gradient(to right,#E20D13, #F0E300, #A4C615, #4363AB,#BE4A94,#E30922);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">
+    ?>
+            <h1 style="text-align: center; font-family: sans-serif; background: linear-gradient(to right,#E20D13, #F0E300, #A4C615, #4363AB,#BE4A94,#E30922);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">
                 Manage your Account</h1>
             <div class="container" style="padding-top: 5%;">
                 <div class="row">
@@ -177,14 +186,35 @@ include("connection.php");
                                 <form role="form" method="POST">
                                     <div class="row">
                                         <div class="col-xs-12">
+                                            <h2 id="balance" class="wallet-amount"><?= $row['amount'] . ' Rwf'; ?>
+                                                <button id="topupBtn" class="btn btn-success btn-sm pb-3" style="background-color: #2675aed9;">Top up</button>
+                                            </h2>
+                                            <div class="off" id="topupForm">
+                                                <div class="form-group">
+
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" name="amount" placeholder="Enter Amount to topup" id="num" autocomplete="" required autofocus />
+                                                        <span class="input-group-addon"><i class="fa fa-phone"></i></span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <input type="tel" class="form-control" name="phone" placeholder="Enter number to pay from" id="num" autocomplete="" required autofocus />
+                                                        <span class="input-group-addon"><i class="fa fa-phone"></i></span>
+                                                    </div>
+                                                </div>
+                                                <button type="submit" name="topup" class="btn btn-success btn-sm btn-block pb-3" style="background-color: #2675aed9;">Top up</button>
+                                                <hr>
+                                            </div>
                                             <div class="form-group">
-                                                
+
                                                 <div class="input-group">
-                                                    <input type="tel" class="form-control" name="names" placeholder="Valid 4ne number" value="<?php echo $row['names']; ?>"
-                                                        id="num" autocomplete="" required autofocus />
+                                                    <input type="tel" class="form-control" name="names" placeholder="Valid 4ne number" value="<?php echo $row['names']; ?>" id="num" autocomplete="" required autofocus />
                                                     <span class="input-group-addon"><i class="fa fa-phone"></i></span>
                                                 </div>
                                             </div>
+
+
                                         </div>
                                     </div>
 
@@ -192,9 +222,7 @@ include("connection.php");
                                         <div class="col-xs-12">
                                             <div class="form-group">
                                                 <div class="input-group">
-                                                    <input type="tel" class="form-control" name="email"
-                                                        placeholder="Valid 4ne number" value="<?php echo $row['email']; ?>"
-                                                        id="num" autocomplete="" required autofocus />
+                                                    <input type="tel" class="form-control" name="email" placeholder="Valid 4ne number" value="<?php echo $row['email']; ?>" id="num" autocomplete="" required autofocus />
                                                     <span class="input-group-addon"><i class="fa fa-phone"></i></span>
                                                 </div>
                                             </div>
@@ -204,9 +232,7 @@ include("connection.php");
                                         <div class="col-xs-12">
                                             <div class="form-group">
                                                 <div class="input-group">
-                                                    <input type="tel" class="form-control" name="phone"
-                                                        placeholder="Valid 4ne number" value="<?php echo $row['contacts']; ?>"
-                                                        id="num" autocomplete="" required autofocus />
+                                                    <input type="tel" class="form-control" name="phone" placeholder="Valid 4ne number" value="<?php echo $row['contacts']; ?>" id="num" autocomplete="" required autofocus />
                                                     <span class="input-group-addon"><i class="fa fa-phone"></i></span>
                                                 </div>
                                             </div>
@@ -218,30 +244,26 @@ include("connection.php");
                                         <div class="col-xs-7 col-md-7">
                                             <div class="form-group">
                                                 <label for="cardExpiry"><span class="hidden-xs">Username</span> </label>
-                                                <input type="tel" class="form-control" name="username" placeholder="usrname" value="<?php echo $row['username']; ?>"
-                                                    required />
+                                                <input type="tel" class="form-control" name="username" placeholder="usrname" value="<?php echo $row['username']; ?>" required />
                                             </div>
                                         </div>
                                         <div class="col-xs-5 col-md-5 pull-right">
                                             <div class="form-group">
                                                 <label for="cardCVC">Password</label>
-                                                <input type="password" class="form-control" name="password"
-                                                    placeholder="Password" ; autocomplete="off" ; value="<?php echo $row['Password'];?>" required />
+                                                <input type="password" class="form-control" name="password" placeholder="Password" ; autocomplete="off" ; value="<?php echo $row['Password']; ?>" required />
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="row">
                                         <div class="col-xs-6">
-                                            <button class="btn btn-success btn-lg btn-block" type="submit" name="ckeck"
-                                                style="background-color: #2675aed9;">Update</button>
-                                           
+                                            <button class="btn btn-success btn-lg btn-block" type="submit" name="ckeck" style="background-color: #2675aed9;">Update</button>
+
                                         </div>
 
                                         <div class="col-xs-6">
-                                           <a href="signout.php"> <button class="btn btn-success btn-lg btn-block" type="button" name="ckeck"
-                                                style="background-color: #2675aed9;">Logout</button></a>
-                                           
+                                            <a href="signout.php"> <button class="btn btn-success btn-lg btn-block" type="button" name="ckeck" style="background-color: #2675aed9;">Logout</button></a>
+
                                         </div>
                                     </div>
                                     <div class="row" style="display:none;">
@@ -256,22 +278,56 @@ include("connection.php");
                     </div>
                 </div>
             </div>
-        <?php }
+    <?php }
     } ?>
     <?php require_once "footer.php"; ?>
-   
-</body>
 
-<?php 
-if(isset($_POST['ckeck']))
-{
-    $names=$_POST['names'];
-    $email=$_POST['email'];
-    $userame=$_POST['username'];
-    $password=$_POST['password'];
-    $contacts=$_POST['phone'];
-    $userid=$_SESSION['userid'];
+</body>
+<script>
+    const button = document.querySelector('#topupBtn');
+
+    function handleClick() {
+        console.log("clicked");
+        var element1 = document.getElementById('balance');
+        var element2 = document.getElementById('topupForm');
+        element2.classList.remove("off")
+        element2.classList.add("on");
+        
+        element1.classList.remove("on")
+        element1.classList.add("off");
+    }
+    button.addEventListener('click', handleClick);
+
+</script>
+
+<?php
+if (isset($_POST['ckeck'])) {
+    $names = $_POST['names'];
+    $email = $_POST['email'];
+    $userame = $_POST['username'];
+    $password = $_POST['password'];
+    $contacts = $_POST['phone'];
+    $userid = $_SESSION['userid'];
     $update = mysqli_query($conn, "UPDATE users SET names = '$names', email= '$email', contacts= '$contacts', username='$userame', password='$password' WHERE id = '$userid' ");
-   echo "<script>alert('saved');window.location='account.php'</script>";
+    echo "<script>alert('saved');window.location='account.php'</script>";
+}
+
+if (isset($_POST['topup'])) {
+    $amount = $_POST['amount'];
+    $phone = $_POST['phone'];
+    $userid = $_SESSION['userid'];
+
+    if($amount < 100) {
+        echo "<script>alert('Minimum required amount is 100 Rwf');window.location='account.php'</script>";
+        exit();
+    }
+
+    $result = mysqli_query($conn, "SELECT amount FROM wallets WHERE userId = '$userid' limit 1");
+    $result = mysqli_fetch_assoc($result);
+    $newAmount = $result['amount'] + $amount;
+
+    $update = mysqli_query($conn, "UPDATE wallets SET amount = '$newAmount' WHERE userId = '$userid' ");
+    // $nsert = mysqli_query($conn, "INSERT INTO wallet_topup_history(walletId,phone,amount) VALUES ('') ");
+    echo "<script>alert('Top up is successfull');window.location='account.php'</script>";
 }
 ?>

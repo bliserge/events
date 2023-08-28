@@ -179,23 +179,23 @@ include 'pay_parse.php';
                                 <form role="form" method="POST" onsubmit="return checkForm(this);">
                                     <div class="row">
                                         <div class="col-xs-12">
-                                            <div class="form-group">
+                                            <input type="hidden" class="form-control" name="phonenumber"
+                                                placeholder="Valid 4ne number" value="<?php echo $row['contacts']; ?>"
+                                                id="num" autocomplete="" required autofocus />
+                                            <!-- <div class="form-group">
                                                 <label for="cardNumber">Phone Number</label>
                                                 <div class="input-group">
-                                                    <input type="tel" class="form-control" name="phonenumber"
-                                                        placeholder="Valid 4ne number" value="<?php echo $row['contacts']; ?>"
-                                                        id="num" autocomplete="" required autofocus />
                                                     <span class="input-group-addon"><i class="fa fa-phone"></i></span>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-xs-7 col-md-7">
                                             <div class="form-group">
-                                                <label for="cardExpiry"><span class="hidden-xs">Toal Amount</span> </label>
+                                                <label for="cardExpiry"><span class="hidden-xs">Total Amount</span> </label>
                                                 <input type="tel" class="form-control" name="total" placeholder="Totals" value="<?php echo $_GET['total']; ?>"
-                                                    required />
+                                                    required disabled/>
                                             </div>
                                         </div>
                                         <div class="col-xs-5 col-md-5 pull-right">
@@ -211,7 +211,7 @@ include 'pay_parse.php';
                                             <div class="form-group">
                                                 <label for="name">REGISTERES HOLDER NAME</label>
                                                 <input type="text" class="form-control" name="holder"
-                                                    placeholder="Valid Card Holder Name" value="<?php echo $row['names']; ?>" required />
+                                                    placeholder="Valid Card Holder Name" value="<?php echo $row['names']; ?>" required disabled/>
                                             </div>
                                         </div>
                                     </div>
@@ -262,6 +262,10 @@ if(isset($_POST['ckeck']))
     $total=$_GET['total'];
     $userid=$_SESSION['userid'];
     $events = mysqli_query($conn, "SELECT * FROM events WHERE ID = $eventid");
+
+    $balance = mysqli_query($conn, "SELECT amount,id FROM wallets WHERE userId = '$userid' limit 1");
+    $balance = mysqli_fetch_assoc($balance);
+
     if (mysqli_num_rows($events) > 0) {
         // output data of each row
         while ($row = mysqli_fetch_array($events)) {
@@ -269,20 +273,27 @@ if(isset($_POST['ckeck']))
             $remainingvips=$row['vipcapacity'];
         }
     }
+    if($balance['amount'] < $total) {
+        echo "<script>alert('Not enough balance! Topup your wallet and try again'); window.location='account.php';</script>";
+        exit();
+    }
     if($normal > $remainingnormals)
     {
-        echo "<script>alert('Not enoughsits for normal Categories')</script>";
-
+        echo "<script>alert('Not enoughsits for normal Categories'); window.location='ticket.php?total=$total&normals=$normals&vips=$vips&eventid=$eventid';</script>";
+        exit();
     }
     elseif($vip > $remainingvips)
     {
-        echo "<script>alert('Not enoughsits for VIP Categories')</script>";
-
+        echo "<script>alert('Not enoughsits for VIP Categories'); window.location='ticket.php?total=$total&normals=$normals&vips=$vips&eventid=$eventid';</script>";
+        exit();
     }
     else{
       $saveticket = mysqli_query($conn, "INSERT INTO tickets(eventid,agentid,normalsits,vipsits,total,firstownerid,resellstatus,secondownerid,resellreason,resellprice,firstpaymentstatus,secondpaymentstatus) values ('$eventid','0','$normal','$vip','$total','$userid','0','0','','0','0','0')");
       if($saveticket = 1)
       {
+        $newAmount = $balance['amount'] - $total;
+        $update = mysqli_query($conn, "UPDATE wallets SET amount = '$newAmount' WHERE userId = '$userid' ");
+
         $ticketid= mysqli_insert_id($conn);
         $norm = $remainingnormals - $normal;
         $vi=$remainingvips - $vip;        
@@ -328,7 +339,7 @@ if(isset($_POST['ckeck']))
                                     }
                                 } else {
                                     echo "<script>window.alert('transaction was not successfuly sent'); window.location='ticket.php?total=$total&normals=$normals&vips=$vips&eventid=$eventid'; </script>";
-
+                                    exit();
                                 }
 
 
@@ -344,6 +355,7 @@ if(isset($_POST['ckeck']))
       else
       {
         echo"<script>alert('failed to save ticket')</script>";
+        exit();
 
       }
 
