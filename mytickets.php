@@ -224,8 +224,7 @@
         <h1 class="page-title">
             <font
                 style="vertical-align: inherit;background: linear-gradient(to right,#E20D13, #F0E300, #A4C615, #4363AB,#BE4A94,#E30922);-webkit-background-clip: text;-webkit-text-fill-color: transparent;/* color: transparent; */">
-                <font style="vertical-align: inherit;  font-family: sans-serif;">Did you know you can resell your ticket
-                    ?</font>
+                <font style="vertical-align: inherit;  font-family: sans-serif;">Did you know you can refund your ticket?</font>
             </font>
         </h1>
 
@@ -237,7 +236,7 @@
             <div class="venue-list-item w-dyn-item">
                 <?php
                 $userid = $_SESSION['userid'];
-                $result = mysqli_query($conn, "SELECT * FROM tickets,events WHERE tickets.eventid= events.ID AND tickets.firstownerid = $userid ORDER BY tickets.id DESC ");
+                $result = mysqli_query($conn, "SELECT * FROM tickets,events WHERE tickets.eventid= events.ID AND tickets.firstownerid = $userid AND tickets.total > 0 ORDER BY tickets.id DESC ");
                 if (mysqli_num_rows($result) > 0) {
                     // output data of each row
                     while ($row = mysqli_fetch_assoc($result)) {
@@ -271,31 +270,8 @@
                                 </div>
                             </div>
                             <div class="w-col w-col-1">
-                                <?php 
-                                if($resellstatus == '0')
-                                {
-                                    ?>
-                                     <button class="rsvp-button w-button" onclick="op('<?php echo $ticketid; ?>','<?php echo $total; ?>')">Resell
-                                </button>
-
-                                    <?php
-
-                                }
-                                elseif($resellstatus == '1'){
+                                <button class="rsvp-button w-button" onclick="op('<?php echo $ticketid; ?>','<?php echo $total; ?>')">Refund</button>
                                 
-                                ?>
-                              <a href="resellbooking.php">  <button class="rsvp-button w-button">View Bookings
-                                </button></a>
-                                <?php }
-                                else
-                                {
-                                    ?>
-                                     <button class="rsvp-button w-button" onclick="op()">View Owner
-                                </button>
-                                    
-                                    <?php
-                                }
-                                 ?>
                             </div>
                             <div class="w-col w-col-1">
                                 <a href="finalticket.php?ticketid=<?php echo $ticketid ?>"> <button
@@ -334,7 +310,7 @@
 
         function op(eventid, total) {
             var eventid = document.getElementById("ticketid").value = eventid;
-            var total = document.getElementById("total").innerHTML = total;
+            // var total = document.getElementById("total").innerHTML = total;
             modal.style.display = "block";
         }
 
@@ -361,12 +337,7 @@
                 var t = Number(document.getElementById("quantity").value);
                 var r = Number(document.getElementById("quantty").value);
 
-                var normal = Number(document.getElementById("normal").textContent);
-                var vip = Number(document.getElementById("vip").textContent);
-
-
-
-                document.getElementById("myText").value = t * normal + r * vip;
+                // document.getElementById("myText").value = t * normal + r * vip;
 
 
                 // Increment
@@ -389,10 +360,7 @@
                 var t = Number(document.getElementById("quantity").value);
                 var r = Number(document.getElementById("quantty").value);
 
-                var normal = Number(document.getElementById("normal").textContent);
-                var vip = Number(document.getElementById("vip").textContent);
-
-                document.getElementById("myText").value = t * normal + r * vip;
+                // document.getElementById("myText").value = t * normal + r * vip;
             });
 
         });
@@ -415,9 +383,7 @@
                 var t = Number(document.getElementById("quantity").value);
                 var r = Number(document.getElementById("quantty").value);
 
-                var normal = Number(document.getElementById("normal").textContent);
-                var vip = Number(document.getElementById("vip").textContent);
-                document.getElementById("myText").value = t * normal + r * vip;
+                // document.getElementById("myText").value = t * normal + r * vip;
 
 
                 // Increment
@@ -439,23 +405,20 @@
                 var t = Number(document.getElementById("quantity").value);
                 var r = Number(document.getElementById("quantty").value);
 
-                var normal = Number(document.getElementById("normal").textContent);
-                var vip = Number(document.getElementById("vip").textContent);
-                document.getElementById("myText").value = t * normal + r * vip;
+                // document.getElementById("myText").value = t * normal + r * vip;
             });
 
         });
     </script>
     <script>
         function che() {
-            var price = Number(document.getElementById("myText").value);
 
-            if (to > 0) {
+            var normals = Number(document.getElementById("quantity").value);
+            var vips = Number(document.getElementById("quantty").value);
+            var ticketid = Number(document.getElementById("ticketid").value);
+            var eventid = Number(document.getElementById("eventid").textContent);
 
-            }
-            else {
-                alert("ticket price amount should be greater than 0");
-            }
+            window.location = 'ticketRefund.php?normals=' + normals + '&vips=' + vips + '&eventid=' + eventid + '&ticketid=' + ticketid;
         }
     </script>
 </body>

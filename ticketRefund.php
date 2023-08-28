@@ -153,13 +153,10 @@ include 'pay_parse.php';
         // output data of each row
         while ($row = mysqli_fetch_assoc($result)) {
 
-
-
-
             ?>
             <h1
                 style="text-align: center; font-family: sans-serif; background: linear-gradient(to right,#E20D13, #F0E300, #A4C615, #4363AB,#BE4A94,#E30922);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">
-                Proceed Checkout</h1>
+                Comfirm Refund</h1>
             <div class="container" style="padding-top: 5%;">
                 <div class="row">
                     <div class="col-md-4"></div>
@@ -170,7 +167,7 @@ include 'pay_parse.php';
                         <div class="panel panel-default credit-card-box">
                             <div class="panel-heading display-table">
                                 <div class="row display-tr">
-                                    <h3 class="panel-title display-td">Payment Details</h3>
+                                    <h3 class="panel-title display-td">Refund Details</h3>
                                     <div class="display-td">
                                     </div>
                                 </div>
@@ -182,27 +179,21 @@ include 'pay_parse.php';
                                             <input type="hidden" class="form-control" name="phonenumber"
                                                 placeholder="Valid 4ne number" value="<?php echo $row['contacts']; ?>"
                                                 id="num" autocomplete="" required autofocus />
-                                            <!-- <div class="form-group">
-                                                <label for="cardNumber">Phone Number</label>
-                                                <div class="input-group">
-                                                    <span class="input-group-addon"><i class="fa fa-phone"></i></span>
-                                                </div>
-                                            </div> -->
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-xs-7 col-md-7">
+                                        <div class="col-xs-6 col-md-6">
                                             <div class="form-group">
-                                                <label for="cardExpiry"><span class="hidden-xs">Total Amount</span> </label>
-                                                <input type="tel" class="form-control" name="total" placeholder="Totals" value="<?php echo $_GET['total']; ?>"
+                                                <label for="cardExpiry"><span class="hidden-xs">normal Tickets</span> </label>
+                                                <input type="tel" class="form-control" name="total" placeholder="Totals" value="<?php echo $_GET['normals']; ?>"
                                                     required disabled/>
                                             </div>
                                         </div>
-                                        <div class="col-xs-5 col-md-5 pull-right">
+                                        <div class="col-xs-6 col-md-6 pull-right">
                                             <div class="form-group">
-                                                <label for="cardCVC">Nm | VIP</label>
+                                                <label for="cardCVC">VIP tickets</label>
                                                 <input type="text" class="form-control" name="normal sits" id="cvc" ;
-                                                    placeholder="Sits" ; autocomplete="off" ; value="<?php echo $_GET['normals'];?> | <?php echo $_GET['vips']; ?>" required disabled />
+                                                    placeholder="Sits" ; autocomplete="off" ; value="<?php echo $_GET['vips']; ?>" required disabled />
                                             </div>
                                         </div>
                                     </div>
@@ -218,7 +209,7 @@ include 'pay_parse.php';
                                     <div class="row">
                                         <div class="col-xs-12">
                                             <button class="btn btn-success btn-lg btn-block" type="submit" name="ckeck"
-                                                style="background-color: #2675aed9;">Pay</button>
+                                                style="background-color: #2675aed9;">Refund</button>
                                            
                                         </div>
                                     </div>
@@ -244,10 +235,6 @@ include 'pay_parse.php';
             if (n == 10) {
               
             }
-            else {
-                alert("Enter valid Card Number");
-                return false;
-            }
         }
     </script>
 
@@ -256,115 +243,47 @@ include 'pay_parse.php';
 <?php 
 if(isset($_POST['ckeck']))
 {
-    $eventid=$_GET['eventid'];
+    
+    $ticketid=$_GET['ticketid'];
     $vip=$_GET['vips'];
     $normal=$_GET['normals'];
-    $total=$_GET['total'];
     $userid=$_SESSION['userid'];
-    $events = mysqli_query($conn, "SELECT * FROM events WHERE ID = $eventid");
+
+    $events = mysqli_query($conn, "SELECT normalsits, vipsits, ticketprice, vipprice, eventid FROM `tickets` t JOIN `events` e ON t.eventid = e.ID WHERE t.id =  $ticketid limit 1");
+    $events = mysqli_fetch_assoc($events);
 
     $balance = mysqli_query($conn, "SELECT amount,id FROM wallets WHERE userId = '$userid' limit 1");
     $balance = mysqli_fetch_assoc($balance);
 
-    if (mysqli_num_rows($events) > 0) {
-        // output data of each row
-        while ($row = mysqli_fetch_array($events)) {
-            $remainingnormals=$row['normalcapacity'];
-            $remainingvips=$row['vipcapacity'];
-        }
-    }
-    if($balance['amount'] < $total) {
-        echo "<script>alert('Not enough balance! Topup your wallet and try again'); window.location='account.php';</script>";
+    if($events['normalsits'] < $normal) {
+        echo "<script>alert(\"You don't have those normal tickets\"); window.location='ticketRefund.php?normals=$normal&vips=$vip&eventid=$eventid&ticketid=$ticketid';</script>";
         exit();
     }
-    if($normal > $remainingnormals)
-    {
-        echo "<script>alert('Not enoughsits for normal Categories'); window.location='ticket.php?total=$total&normals=$normals&vips=$vips&eventid=$eventid';</script>";
+    if($events['vipsits'] < $vip) {
+        echo "<script>alert(\"You don't have those VIP tickets\"); window.location='ticketRefund.php?normals=$normal&vips=$vip&eventid=$eventid&ticketid=$ticketid';</script>";
         exit();
     }
-    elseif($vip > $remainingvips)
-    {
-        echo "<script>alert('Not enoughsits for VIP Categories'); window.location='ticket.php?total=$total&normals=$normals&vips=$vips&eventid=$eventid';</script>";
-        exit();
-    }
-    else{
-      $saveticket = mysqli_query($conn, "INSERT INTO tickets(eventid,agentid,normalsits,vipsits,total,firstownerid,resellstatus,secondownerid,resellreason,resellprice,firstpaymentstatus,secondpaymentstatus) values ('$eventid','0','$normal','$vip','$total','$userid','0','0','','0','0','0')");
-      if($saveticket = 1)
-      {
-        $newAmount = $balance['amount'] - $total;
-        $update = mysqli_query($conn, "UPDATE wallets SET amount = '$newAmount' WHERE userId = '$userid' ");
+    
+    $newNomSits = $events['normalsits'] - $normal;
+    $newVipSits = $events['vipsits'] - $vip;
 
-        $ticketid= mysqli_insert_id($conn);
-        $norm = $remainingnormals - $normal;
-        $vi=$remainingvips - $vip;        
-        $update = mysqli_query($conn, "UPDATE events SET normalcapacity = '$norm', vipcapacity = '$vi' WHERE ID= '$eventid' ");
-        if($update = 1)
-        {
-            $phone1=$_POST['phonenumber'];
-            $price=$_POST['total'];
-            $curl = curl_init();
-            $transID = uniqid();
-            $calback = "";
-            $normals=$_GET['normals'];
-            $eventid=$_GET['eventid'];
-            $vips=$_GET['vips'];
-            $eventid=$_GET['eventid'];
-            $dates=date('d/m/Y');
-            $empty='';
-            $off=0;
-            $userid=$_SESSION['userid'];
-            $holdersname=$_POST['holder'];
-            
-           
-                                hdev_payment::api_id("HDEV-48d87cf2-c648-49c1-9c7c-a1a12dbc30eb-ID"); //send the api ID to hdev_payment
-                                hdev_payment::api_key("HDEV-79d8e552-5bed-4f5a-9551-cd051e32e406-KEY");//send the api KEY to hdev_payment
-                                $pay = hdev_payment::pay($phone1, $price, $transID, $calback); //finishing the transaction 
+    $fund = ((($normal * $events['ticketprice'])*80)/100) + ((($vip * $events['vipprice'])*80)/100);
 
-                                //var_dump($pay);//to get payment server response
-                                $status = $pay->status; //get transaction status if sent or not
-                                $message = $pay->message; //transaction message 
-                                if ($status = 1) {                                    
-                                    $insertQuery = mysqli_query($conn, "INSERT INTO payments(ticketid,userid,paid_dates,paid_phone,holdername,amount,transID,transaction_momo,trans_status) VALUES ('$ticketid','$userid','$dates','$phone1','$holdersname','$total','$transID','$empty','$off')");
-                                    if ($insertQuery == 1) {
-                                        echo "error:" . mysqli_error($conn);    
-                                        $paymentid= mysqli_insert_id($conn);
+    $total = ($newNomSits * $events['ticketprice']) + ($newVipSits * $events['vipprice']);
+    
+    // echo "<script>alert($events);</script>";
+    // var_dump($newVipSits);
+    // exit();
 
-                                        //echo "<script>window.location='comfirm.php?'; </script>";
-                                    } else {
-                                        //if the query was not ok bring alert
-                                       // echo "<script>window.alert('failed to load querry'); window.location='ticket.php?total=$total&normals=$normals&vips=$vips&eventid=$eventid'; </script>";
-                                       echo "error:" . mysqli_error($conn);                                      
+    $updateTickets = mysqli_query($conn, "UPDATE `tickets` SET `normalsits`= $newNomSits, `vipsits`=$newVipSits, `total`=$total, `resellstatus` = 1 WHERE id = $ticketid ");
+    $eventid=$events['eventid'];
 
+    $updateEvents  = mysqli_query($conn, "UPDATE events SET normalcapacity = normalcapacity + '$normal', vipcapacity = vipcapacity + '$vip' WHERE ID= '$eventid' ");
+  
+    $updateWallet  = mysqli_query($conn, "UPDATE wallets SET amount = amount + '$fund' WHERE userId = '$userid' ");
 
-                                    }
-                                } else {
-                                    echo "<script>window.alert('transaction was not successfuly sent'); window.location='ticket.php?total=$total&normals=$normals&vips=$vips&eventid=$eventid'; </script>";
-                                    exit();
-                                }
-
-
-
-            echo "<script>window.location='success.php?ticketid=$ticketid&paymentid=$paymentid'</script>";
-
-
-        }
-
-        echo"<script>alert('Ticket saved')</script>";
-
-      }
-      else
-      {
-        echo"<script>alert('failed to save ticket')</script>";
-        exit();
-
-      }
-
-
-    }
-
-        
-
-
+    echo "<script>alert('Ticket Refunded successfully'); window.location='mytickets.php';</script>";
+    exit();
 
 }
 ?>

@@ -20,176 +20,176 @@
                     }
     ?>
 
-body{
-  color: white;
-}
-.nav-bar {
+  body{
+    color: white;
+  }
+  .nav-bar {
+      background-color: transparent;
+  }
+  .w-container {
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 940px;
+  }
+  #nav{
     background-color: transparent;
-}
-.w-container {
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 940px;
-}
-#nav{
-	background-color: transparent;
-}
-.logo{
-	padding-top: 8px;
-}
-.w-nav {
-    position: relative;
-    background: #dddddd;
-    z-index: 1000;
-}
-.w-nav-brand {
-    position: relative;
-    float: none;
-    text-decoration: none;
-    color: #333333;
-}
-.w-nav-overlay {
-    position: absolute;
-    overflow: hidden;
-    display: none;
-    top: 100%;
-    left: 0;
-    right: 0;
-    width: 100%;
-}
-body {
+  }
+  .logo{
+    padding-top: 8px;
+  }
+  .w-nav {
+      position: relative;
+      background: #dddddd;
+      z-index: 1000;
+  }
+  .w-nav-brand {
+      position: relative;
+      float: none;
+      text-decoration: none;
+      color: #333333;
+  }
+  .w-nav-overlay {
+      position: absolute;
+      overflow: hidden;
+      display: none;
+      top: 100%;
+      left: 0;
+      right: 0;
+      width: 100%;
+  }
+  body {
 
-  background-image: url(img/music.png);
-    background-size: cover;
-    overflow: scroll;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-}
+    background-image: url(img/music.png);
+      background-size: cover;
+      overflow: scroll;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+  }
 
-.content-wrapper {
-    margin-top: 78px;
-}
-.w-container {
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 940px;
-}
-.page-title {
-    margin-top: 0px;
-    margin-bottom: 86px;
-    font-size: 36px;
-    line-height: 51px;
-    font-weight: 300;
+  .content-wrapper {
+      margin-top: 78px;
+  }
+  .w-container {
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 940px;
+  }
+  .page-title {
+      margin-top: 0px;
+      margin-bottom: 86px;
+      font-size: 36px;
+      line-height: 51px;
+      font-weight: 300;
+      text-align: center;
+      text-transform: uppercase;
+  }
+  .footer {
+      padding-top: 43px;
+      padding-bottom: 43px;
+      background-color: transparent;
+      color: #222;
+      text-align: center;
+  }
+  .venue-list-item {
+      padding-top: 5px;
+      padding-bottom: 5px;
+      border-top: 1px solid hsla(0, 0%, 100%, .3);
+      border-bottom: 1px solid hsla(0, 0%, 100%, .3);
+  }
+
+
+
+  @media screen and (max-width: 991px){
+
+    .w-container {
+      max-width: 728px !important;
+    }	
+    .w-nav[data-collapse="medium"] .w-nav-menu {
+        display: none;
+    }
+    .nav-menu {
+      padding-top: 18px !important;
+      padding-bottom: 18px !important;
+      border-top: 1px solid #000 !important;
+      background-color: rgba(0, 0, 0, .85) !important;
+    }
+    
+    .w-container {
+      max-width: 728px !important;
+    }
+    .logo{
+    padding-top: 8px !important;
+    width: 10% !important;
+    }
+  }
+
+  @media (max-width: 767px){
+    
+
+    .logo{
+    padding-top: 8px !important;
+    width: 10% !important;
+    }
+  }
+
+  @media screen and (max-width: 479px){
+    .w-container {
+        max-width: none !important;
+    }	
+    .logo{
+    padding-top: 8px !important;
+    width: 10% !important;
+    }
+  }
+
+  #a{
+      color: #2675ae;
+      text-decoration: none;
+  }
+  .new{
+    margin-top: 16px;
+      padding: 15px 20px;
+      text-align: center;
+  }
+  .head{
+    
     text-align: center;
-    text-transform: uppercase;
-}
-.footer {
-    padding-top: 43px;
-    padding-bottom: 43px;
+  }
+  .login{
+
+    margin: 0 auto;
+      width: 340px;
+  }
+  label{
+    color: #0e0e0f;
+  }
+  .bd1{
+
     background-color: transparent;
-    color: #222;
-    text-align: center;
-}
-.venue-list-item {
-    padding-top: 5px;
-    padding-bottom: 5px;
-    border-top: 1px solid hsla(0, 0%, 100%, .3);
-    border-bottom: 1px solid hsla(0, 0%, 100%, .3);
-}
+      font-size: 14px;
+      padding: 20px;
+  }
+  .btn-primary {
+      background-color: #2675aed9;
+  }
+  form label {
+      display: block;
+      margin-bottom: 7px;
+  }
+  input{
+    margin-bottom: 15px;
+      margin-top: 5px;
+  }
+  .label-link{
+    margin-left: 7em;
+  }
+  .form-control{
+    background-color: #ffffffc2;
+  }
+  #p{
+    color: black;
 
-
-
-@media screen and (max-width: 991px){
-
-	.w-container {
-    max-width: 728px !important;
-	}	
-	.w-nav[data-collapse="medium"] .w-nav-menu {
-	    display: none;
-	}
-	.nav-menu {
-    padding-top: 18px !important;
-    padding-bottom: 18px !important;
-    border-top: 1px solid #000 !important;
-    background-color: rgba(0, 0, 0, .85) !important;
-	}
-	
-	.w-container {
-    max-width: 728px !important;
-	}
-	.logo{
-	padding-top: 8px !important;
-	width: 10% !important;
-	}
-}
-
-@media (max-width: 767px){
-	
-
-	.logo{
-	padding-top: 8px !important;
-	width: 10% !important;
-	}
-}
-
-@media screen and (max-width: 479px){
-	.w-container {
-	    max-width: none !important;
-	}	
-	.logo{
-	padding-top: 8px !important;
-	width: 10% !important;
-	}
-}
-
-#a{
-    color: #2675ae;
-    text-decoration: none;
-}
-.new{
-  margin-top: 16px;
-    padding: 15px 20px;
-    text-align: center;
-}
-.head{
-  
-  text-align: center;
-}
-.login{
-
-  margin: 0 auto;
-    width: 340px;
-}
-label{
-  color: #0e0e0f;
-}
-.bd1{
-
-  background-color: transparent;
-    font-size: 14px;
-    padding: 20px;
-}
-.btn-primary {
-    background-color: #2675aed9;
-}
-form label {
-    display: block;
-    margin-bottom: 7px;
-}
-input{
-  margin-bottom: 15px;
-    margin-top: 5px;
-}
-.label-link{
-  margin-left: 7em;
-}
-.form-control{
-  background-color: #ffffffc2;
-}
-#p{
-  color: black;
-
-}
+  }
 
 </style>
 </head>
@@ -206,10 +206,20 @@ input{
   <div class="w-dyn-list" style="text-align: center;">
     <div class="w-dyn-items"><div class="venue-list-item w-dyn-item">
     <?php
-      $result=mysqli_query( $conn, "SELECT * FROM events ORDER BY ID DESC ");
-      if (mysqli_num_rows($result) > 0) {
-        // output data of each row
-          while($row = mysqli_fetch_assoc($result)) {
+      $apiUrl = 'http://localhost:3402/recommendations?id=1';
+
+
+      $response = file_get_contents($apiUrl);
+
+      if ($response === false) {
+          echo "Error fetching data from the API.";
+          exit;
+      }
+
+
+      $data = json_decode($response, true)['recommendations'];
+        
+          foreach($data as $row) {
             $eventid=$row['ID'];
             $normal=$row['ticketprice'];
             $vip=$row['vipprice'];
@@ -218,22 +228,41 @@ input{
 
           
                     ?>
-          <div class="tour-date-row w-row">
-            <div class="w-col w-col-2">
-              <div>November 24, 2023</div>
+           <div class="col-md-4" style="width:300px;">
+                <div class="thumb videoThumb">
+                    <div class="videoThumbImage">
+                        <div class="hover"></div>
+                        <div class="playIcon"></div>
+                        <img class="elastic img" src="img\events\<?php echo $row['eventimage']; ?>" alt=<?php echo $row['events']; ?>">
+                    </div>
+                    <div class="title">
+                        <?php echo $row['events']; ?>(
+                        <?php echo $row['description']; ?>)
+                    </div>
+                    <div style="color:white;">
+                        <?php echo $row['duration'] . ", " . $row['eventdate'] . " | " . $row['venue']; ?>
+                        <br>
+                        <?php echo $row['ticketprice']; ?> RWF
+                    </div>
+                    <?php
+                    // print_r($_SESSION);
+                    if (isset($_SESSION['mail'])) {
+                    ?>
+                        <button class="btn btn-primary" onclick="op('<?php echo $eventid; ?>','<?php echo $normal ?>','<?php echo $vip; ?>','<?php echo $rn; ?>','<?php echo $rv; ?>')">BUY
+                            Ticket</button>
+                    <?php
+                    } else {
+                    ?>
+                        <a href="sign in.php"><button class="btn btn-primary">
+                                BUY Ticket </button></a>
+                    <?php
+                    }
+                    ?>
+    
+                </div>
             </div>
-            <div class="w-col w-col-5">
-              <div class="venue"><?php echo $row['events']; ?></div>
-            </div>
-            <div class="w-col w-col-3">
-              <div><?php echo $row['venue']; ?></div>
-            </div>
-            <div class="w-col w-col-2">
-              <button class="rsvp-button w-button" onclick="op('<?php echo $eventid; ?>','<?php echo $normal ?>','<?php echo $vip; ?>','<?php echo $rn; ?>','<?php echo $rv; ?>')">Buy Tickets</button>
-            </div>
-          </div>
           <?php 
-          }}
+          }
 
           
           ?>
